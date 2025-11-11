@@ -1,128 +1,178 @@
 <!doctype html>
 <html lang="bn">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Download Demo — Navi Care Routine</title>
-  <style>
-    :root{--bg:#0f1724;--card:#0b1220;--accent:#06b6d4;--muted:#94a3b8}
-    *{box-sizing:border-box}
-    body{font-family:Inter, system-ui, -apple-system, Arial, sans-serif; margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center; background:linear-gradient(180deg,#071028 0%, #051025 100%); color:#e6eef6}
-    .wrap{width:100%;max-width:520px;padding:20px}
-    .card{background:rgba(255,255,255,0.03); border-radius:14px; padding:20px; box-shadow:0 8px 30px rgba(2,6,23,0.6)}
-    h1{font-size:18px;margin:0 0 10px}
-    p.lead{color:var(--muted); margin:0 0 18px}
-    .fake-link{display:flex; gap:10px; align-items:center}
-    .btn{flex:1;padding:14px 16px;border-radius:12px;border:0;background:linear-gradient(90deg,var(--accent),#0ea5a5); color:#042028;font-weight:700;font-size:15px;cursor:pointer}
-    .btn:active{transform:translateY(1px)}
-    .secondary{background:transparent;border:1px solid rgba(255,255,255,0.06); color:var(--muted); padding:10px 12px;border-radius:10px}
-    .note{font-size:13px;color:var(--muted); margin-top:12px}
-
-    /* progress */
-    .progress-wrap{margin-top:14px}
-    .progress{height:12px;background:rgba(255,255,255,0.04); border-radius:999px; overflow:hidden}
-    .bar{height:100%; width:0%; background:linear-gradient(90deg,#34d399,#06b6d4); transition:width 200ms linear}
-    .status{font-size:13px;color:var(--muted); margin-top:8px}
-
-    /* modal */
-    .modal{position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(2,6,23,0.6); opacity:0; pointer-events:none; transition:opacity 160ms}
-    .modal.open{opacity:1; pointer-events:auto}
-    .modal-card{background:#071428;padding:18px;border-radius:12px;max-width:420px;width:92%; box-shadow:0 12px 40px rgba(2,6,23,0.7)}
-    .modal h3{margin:0 0 8px}
-    .modal p{color:var(--muted); margin:0 0 12px}
-    .modal .actions{display:flex; gap:8px; justify-content:flex-end}
-    .link-text{display:block;margin-top:10px;font-family:monospace;background:rgba(255,255,255,0.03); padding:8px;border-radius:8px;font-size:13px;color:#cfeff6}
-
-    @media (max-width:420px){h1{font-size:16px}.btn{font-size:14px;padding:12px}}
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Download Demo — Navi Care Routine</title>
+<style>
+:root {
+  --bg:#0f1724; --card:#0b1220; --accent:#06b6d4; --muted:#94a3b8; --success:#34d399;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body {
+  font-family:Inter, system-ui, -apple-system, Arial, sans-serif;
+  display:flex; justify-content:center; align-items:center; min-height:100vh;
+  background:linear-gradient(180deg,#071028 0%, #051025 100%);
+  color:#e6eef6; overflow-x:hidden;
+}
+.wrap{width:100%;max-width:520px;padding:20px;}
+.card{
+  background:rgba(255,255,255,0.03); border-radius:14px; padding:25px;
+  box-shadow:0 8px 30px rgba(2,6,23,0.6);
+}
+h1{font-size:18px;margin-bottom:10px;}
+p.lead{color:var(--muted);margin-bottom:18px;}
+.fake-link{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+.btn{
+  flex:1;padding:14px 16px;border-radius:12px;border:0;
+  background:linear-gradient(90deg,var(--accent),#0ea5a5);
+  color:#042028;font-weight:700;font-size:15px;cursor:pointer;
+  transition:transform 0.1s, filter 0.2s;
+  text-align:center; text-decoration:none;
+}
+.btn:active{transform:translateY(1px);}
+.btn:disabled{opacity:0.6; cursor:not-allowed; filter:brightness(0.8);}
+.secondary{
+  background:transparent;border:1px solid rgba(255,255,255,0.06);
+  color:var(--muted); padding:10px 12px; border-radius:10px; cursor:pointer;
+}
+.note{font-size:13px;color:var(--muted);margin-top:12px;word-break:break-all;}
+.progress-wrap{margin-top:14px;}
+.progress{height:12px;background:rgba(255,255,255,0.04);border-radius:999px;overflow:hidden;}
+.bar{height:100%; width:0%; background:linear-gradient(90deg,var(--success),var(--accent)); transition:width 0.2s linear;}
+.status{font-size:13px;color:var(--muted);margin-top:8px;}
+.modal{
+  position:fixed; inset:0; display:flex; align-items:center; justify-content:center;
+  background:rgba(2,6,23,0.6); opacity:0; pointer-events:none; transition:opacity 160ms;
+}
+.modal.open{opacity:1; pointer-events:auto;}
+.modal-card{
+  background:#071428; padding:20px; border-radius:12px; max-width:420px; width:92%;
+  box-shadow:0 12px 40px rgba(2,6,23,0.7); text-align:center;
+}
+.modal h3{margin-bottom:8px;}
+.modal p{color:var(--muted); margin-bottom:12px;}
+.modal .actions{display:flex; gap:8px; justify-content:center; flex-wrap:wrap;}
+.link-text{display:block; margin-top:10px; font-family:monospace;
+  background:rgba(255,255,255,0.03); padding:8px; border-radius:8px; font-size:13px; color:#cfeff6;}
+@media(max-width:420px){h1{font-size:16px;} .btn{font-size:14px;padding:12px;}}
+.confetti-piece{
+  position:absolute;width:8px;height:8px;opacity:0.8;pointer-events:none;
+  border-radius:2px; top:0; transform:rotate(45deg);
+}
+</style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="card">
-      <h1>নাভি কেয়ার — ডাউনলোড ডেমো</h1>
-      <p class="lead">এই পেজটি একটি <strong>ডেমো</strong> — নিচের "ডাউনলোড" বাটনে ক্লিক করলে কোনো ফাইল ডাউনলোড হবে না। এটি কেবলমাত্র প্রদর্শন/প্র্যাকটিসের জন্য।</p>
+<div class="wrap">
+  <div class="card">
+    <h1>নাভি কেয়ার — ডাউনলোড ডেমো</h1>
+    <p class="lead">এই পেজটি একটি <strong>ডেমো</strong> — নিচের "ডাউনলোড" বাটনে ক্লিক করলে আসল একটি ছবি ডাউনলোড হবে।</p>
+    <div class="fake-link">
+      <!-- Download link -->
+      <a id="downloadBtn" class="btn" href="/img/download.jpeg">Download Navi_Care_Routine.png</a>
+      
+      <button class="secondary" id="copyBtn">Copy Link</button>
+    </div>
+    <div class="progress-wrap" aria-hidden="true">
+      <div class="progress"><div class="bar" id="bar"></div></div>
+      <div class="status" id="statusText" aria-live="polite">Status: অপেক্ষা করা হচ্ছে…</div>
+    </div>
+    <div class="note">লিংক টেক্সট: <span class="link-text">https://via.placeholder.com/600x400.png</span></div>
+  </div>
+</div>
 
-      <div class="fake-link">
-        <button class="btn" id="downloadBtn">Download Navi_Care_Routine.pdf</button>
-        <button class="secondary" id="copyBtn">Copy Link</button>
-      </div>
-
-      <div class="progress-wrap" aria-hidden="true">
-        <div class="progress" id="progressBar"><div class="bar" id="bar"></div></div>
-        <div class="status" id="statusText">Status: অপেক্ষা করা হচ্ছে…</div>
-      </div>
-
-      <div class="note">লিংক টেক্সট: <span class="link-text">https://download-now.example/fake-navi-care-12345</span></div>
+<div class="modal" id="modal">
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <h3 id="modalTitle">ডাউনলোড সম্পন্ন!</h3>
+    <p>ফাইলটি ডাউনলোড হয়েছে।</p>
+    <div class="actions">
+      <button class="secondary" id="closeModal">ঠিক আছে</button>
+      <button class="btn" id="openFakeDownload">আর দেখাও</button>
     </div>
   </div>
+</div>
 
-  <!-- modal -->
-  <div class="modal" id="modal">
-    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-      <h3 id="modalTitle">shilpa tumi hecked</p>
-      <div class="actions">
-        <button class="secondary" id="closeModal">ঠিক আছে</button>
-        <button class="btn" id="openFakeDownload">আর দেখাও</button>
-      </div>
-    </div>
-  </div>
+<audio id="tickSound" src="/img/582270464_1127472956134061_7185159810905468965_n.jpg"></audio>
 
-  <script>
-    const downloadBtn = document.getElementById('downloadBtn');
-    const copyBtn = document.getElementById('copyBtn');
-    const bar = document.getElementById('bar');
-    const statusText = document.getElementById('statusText');
-    const modal = document.getElementById('modal');
-    const closeModal = document.getElementById('closeModal');
-    const openFakeDownload = document.getElementById('openFakeDownload');
+<script>
+const downloadBtn=document.getElementById('downloadBtn');
+const copyBtn=document.getElementById('copyBtn');
+const bar=document.getElementById('bar');
+const statusText=document.ngetElementById('statusText');
+const modal=document.getElementById('modal');
+const closeModal=document.getElementById('closeModal');
+const openFakeDownload=document.getElementById('openFakeDownload');
+const tickSound=document.getElementById('tickSound');
 
-    function openModal(){ modal.classList.add('open'); }
-    function closeModalFn(){ modal.classList.remove('open'); }
+function openModal(){ modal.classList.add('open'); }
+function closeModalFn(){ modal.classList.remove('open'); }
 
-    // Fake download simulation
-    downloadBtn.addEventListener('click', ()=>{
-      statusText.textContent = 'Status: ডাউনলোড শুরু হচ্ছে...';
-      bar.style.width = '0%';
-      let percent = 0;
-      downloadBtn.disabled = true;
-      const id = setInterval(()=>{
-        percent += Math.floor(Math.random()*18) + 8; // jump random
-        if(percent >= 100) percent = 100;
-        bar.style.width = percent + '%';
-        statusText.textContent = 'Status: ডাউনলোড ' + percent + '%';
-        if(percent === 100){
-          clearInterval(id);
-          statusText.textContent = 'Status: সম্পন্ন — কিন্তু ফাইল নেই';
-          setTimeout(()=>{
-            openModal();
-            downloadBtn.disabled = false;
-            bar.style.width = '0%';
-            statusText.textContent = 'Status: অপেক্ষা করা হচ্ছে…';
-          }, 700);
-        }
-      }, 350);
-    });
+function createConfetti(){
+  const count=50;
+  for(let i=0;i<count;i++){
+    const conf=document.createElement('div');
+    conf.classList.add('confetti-piece');
+    conf.style.left=Math.random()*100+'vw';
+    conf.style.background=`hsl(${Math.random()*360},80%,60%)`;
+    document.body.appendChild(conf);
+    const duration=Math.random()*2000+1500;
+    conf.animate([
+      {transform:`translateY(0px) rotate(0deg)`, opacity:1},
+      {transform:`translateY(400px) rotate(${Math.random()*720}deg)`, opacity:0}
+    ],{duration:duration, easing:'ease-out'});
+    setTimeout(()=>conf.remove(),duration);
+  }
+}
 
-    // copy fake link to clipboard
-    copyBtn.addEventListener('click', ()=>{
-      const fake = 'https://download-now.example/fake-navi-care-12345';
-      navigator.clipboard && navigator.clipboard.writeText(fake).then(()=>{
-        copyBtn.textContent = 'Copied!';
-        setTimeout(()=> copyBtn.textContent = 'Copy Link', 1400);
-      }).catch(()=>{
-        alert('ক্লি পবোর্ডে কপি করা গেল না — ম্যানুয়ালি কপি করো:\n' + fake);
-      });
-    });
+// Fake download animation while clicking actual link
+downloadBtn.addEventListener('click', (e)=>{
+  e.preventDefault(); // prevent immediate download to show progress
+  statusText.textContent='Status: ডাউনলোড শুরু হচ্ছে...';
+  bar.style.width='0%';
+  downloadBtn.disabled=true;
+  let percent=0;
+  const href=downloadBtn.href;
+  const downloadName=downloadBtn.getAttribute('download');
+  const id=setInterval(()=>{
+    percent+=Math.floor(Math.random()*8)+4;
+    if(percent>100) percent=100;
+    bar.style.width=percent+'%';
+    statusText.textContent='Status: ডাউনলোড '+percent+'%';
+    tickSound.currentTime=0; tickSound.play();
+    if(percent===100){
+      clearInterval(id);
+      statusText.textContent='Status: সম্পন্ন — ফাইল ডাউনলোড হচ্ছে';
+      createConfetti();
+      // Trigger actual download
+      const a=document.createElement('a');
+      a.href=href;
+      a.download=downloadName;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(()=>{
+        openModal();
+        downloadBtn.disabled=false;
+        bar.style.width='0%';
+        statusText.textContent='Status: অপেক্ষা করা হচ্ছে…';
+      },800);
+    }
+  },200);
+});
 
-    closeModal.addEventListener('click', closeModalFn);
-    openFakeDownload.addEventListener('click', ()=>{
-      // small extra animation before showing modal again
-      closeModalFn();
-      setTimeout(openModal, 200);
-    });
+// Copy Link
+copyBtn.addEventListener('click', ()=>{
+  const fake=downloadBtn.href;
+  navigator.clipboard.writeText(fake).then(()=>{
+    copyBtn.textContent='Copied!';
+    copyBtn.disabled=true;
+    setTimeout(()=>{copyBtn.textContent='Copy Link';copyBtn.disabled=false;},1400);
+  }).catch(()=>{alert('ক্লিপবোর্ডে কপি করা গেল না:\n'+fake);});
+});
 
-    // close modal when clicking outside card
-    modal.addEventListener('click', (e)=>{ if(e.target === modal) closeModalFn(); });
-  </script>
+closeModal.addEventListener('click',closeModalFn);
+openFakeDownload.addEventListener('click',()=>{closeModalFn(); setTimeout(openModal,200);});
+modal.addEventListener('click',(e)=>{if(e.target===modal) closeModalFn();});
+</script>
 </body>
 </html>
